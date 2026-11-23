@@ -129,7 +129,7 @@ $('#locateBtn').addEventListener('click', () => {
   navigator.geolocation.getCurrentPosition(async (position) => {
     try {
       const { latitude, longitude } = position.coords;
-      const url = `https://api.aladhan.com/v1/timings?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&method=5`;
+      const url = `https://api.aladhan.com/v1/timings?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&method=${encodeURIComponent(prefs.method || "5")}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Prayer API unavailable');
       const json = await response.json();
