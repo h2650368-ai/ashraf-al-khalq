@@ -41,7 +41,7 @@ async function fetchPrayerTimes(lat,lon){
  const t=j.data.timings, rows=[['الفجر',t.Fajr],['الظهر',t.Dhuhr],['العصر',t.Asr],['المغرب',t.Maghrib],['العشاء',t.Isha]];
  $('#prayerTimes').innerHTML=rows.map(x=>'<div><small>'+x[0]+'</small><b>'+esc(String(x[1]).slice(0,5))+'</b></div>').join('');
  $('#locationText').textContent='تم تحديث المواقيت '+(j.data.date?.readable?'ليوم '+j.data.date.readable:'')+(j.data.meta?.timezone?' — '+j.data.meta.timezone:'')+'.';
- if(prefs.prayerAlerts&&window.AshrafAndroid?.schedulePrayerAlarms)window.AshrafAndroid.schedulePrayerAlarms(JSON.stringify({timings:t,enabled:true,sound:prefs.adhanVoice}));
+ if(prefs.prayerAlerts&&window.AshrafAndroid?.schedulePrayerAlarms)window.AshrafAndroid.schedulePrayerAlarms(JSON.stringify({timings:t,enabled:true,sound:prefs.adhanVoice,vibration:prefs.vibration}));
  return j.data;
 }
 function locate(){if(!navigator.geolocation){$('#locationText').textContent='تحديد الموقع غير مدعوم.';return}$('#locationText').textContent='جارٍ تحديد موقعك…';navigator.geolocation.getCurrentPosition(async p=>{prefs.latitude=String(p.coords.latitude);prefs.longitude=String(p.coords.longitude);localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();try{await fetchPrayerTimes(prefs.latitude,prefs.longitude)}catch{$('#locationText').textContent='تعذر جلب المواقيت. تحقق من الإنترنت.'}},()=>{$('#locationText').textContent='لم يتم السماح بالموقع. أدخل الإحداثيات يدويًا من الإعدادات.'},{enableHighAccuracy:false,timeout:15000,maximumAge:600000})}
