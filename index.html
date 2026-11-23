@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101b19"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="أشرف الخلق"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="assets/icon.svg"><meta name="description" content="أشرف الخلق — مساحة للقرآن والذكر ومواقيت الصلاة">
+  <link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
+  <title>أشرف الخلق</title>
+</head>
+<body>
+<header class="top"><div class="brand"><span class="mark">۞</span><div><b>أشرف الخلق</b><small>نورٌ وذكرٌ وأثر طيب</small></div></div><button id="installBtn" class="ghost" hidden>تثبيت التطبيق</button></header>
+<main>
+<section class="hero">
+  <div class="eyebrow">صدقة جارية بإذن الله</div><h1>اللهم اجعل هذا العمل<br><em>نورًا ورحمةً</em></h1>
+  <p>اللهم اغفر له وارحمه، واجعل ما يُقرأ ويُذكر هنا في ميزان حسناته.</p>
+  <div class="hero-actions"><button class="primary" data-tab="quran">اقرأ القرآن</button><button class="secondary" data-tab="tasbeeh">ابدأ التسبيح</button></div>
+</section>
+<section class="prayer panel">
+  <div class="section-head"><div><span class="eyebrow">مواقيت الصلاة</span><h2>صلاتك في وقتها</h2></div><button id="locateBtn" class="ghost">تحديد موقعي</button></div>
+  <p id="locationText" class="muted">فعّل الموقع لعرض المواقيت حسب مدينتك.</p>
+  <div id="prayerTimes" class="times"><div><small>الفجر</small><b>—:—</b></div><div><small>الظهر</small><b>—:—</b></div><div><small>العصر</small><b>—:—</b></div><div><small>المغرب</small><b>—:—</b></div><div><small>العشاء</small><b>—:—</b></div></div>
+  <p class="tiny">المواقيت تُجلب من خدمة حساب المواقيت، وقد تختلف حسب طريقة الحساب المعتمدة.</p>
+</section>
+<nav class="tabs" aria-label="أقسام التطبيق">
+  <button class="tab active" data-tab="home">الرئيسية</button><button class="tab" data-tab="quran">القرآن</button><button class="tab" data-tab="tasbeeh">السبحة</button><button class="tab" data-tab="adhkar">الأذكار</button>
+</nav>
+<section id="home" class="view active">
+  <div class="cards">
+    <button class="feature" data-tab="quran"><span>📖</span><b>القرآن الكريم</b><small>السور والآيات</small></button>
+    <button class="feature" data-tab="tasbeeh"><span>📿</span><b>السبحة الإلكترونية</b><small>ذكر واحتساب</small></button>
+    <button class="feature" data-tab="adhkar"><span>🌿</span><b>أذكار مختارة</b><small>أذكار يومية</small></button>
+  </div>
+  <div class="panel quote"><span class="eyebrow">آية اليوم</span><p>﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾</p><small>سورة الرعد — ٢٨</small></div>
+</section>
+<section id="quran" class="view">
+  <div class="section-head"><div><span class="eyebrow">كلام الله</span><h2>القرآن الكريم</h2></div></div>
+  <div class="row"><select id="surahSelect" aria-label="اختر السورة"><option value="">جاري تحميل السور…</option></select><button id="loadSurah" class="primary">عرض</button></div>
+  <div id="quranContent" class="quran-content panel">اختر سورة لعرض آياتها.</div>
+  <p class="tiny">النص القرآني يُحمّل من واجهة AlQuran Cloud. راجع المصحف المعتمد عند الحفظ أو المراجعة.</p>
+</section>
+<section id="tasbeeh" class="view">
+  <div class="panel tasbeeh-panel"><span class="eyebrow">سبّح واذكر الله</span><h2>السبحة الإلكترونية</h2>
+    <select id="dhikrSelect"><option>سبحان الله</option><option>الحمد لله</option><option>الله أكبر</option><option>أستغفر الله</option><option>لا إله إلا الله</option><option>اللهم صلِّ على محمد</option><option value="custom">ذكر مخصص…</option></select>
+    <input id="customDhikr" class="custom" placeholder="اكتب الذكر هنا" hidden maxlength="80">
+    <div class="counter" id="count">0</div><div class="goal-line">الهدف: <input id="goal" type="number" min="1" max="100000" value="100"> مرة</div>
+    <div class="progress"><span id="progressBar"></span></div><button id="countBtn" class="count-btn" aria-label="زيادة العداد">سبّح</button>
+    <div class="tas-actions"><button id="resetBtn" class="secondary">تصفير العداد</button><label class="switch"><input id="vibrate" type="checkbox" checked> اهتزاز</label></div>
+    <p id="goalMessage" class="muted"></p>
+  </div>
+  <div class="panel"><div class="section-head"><h3>سجلّك الحالي</h3><button id="clearHistory" class="ghost">مسح السجل</button></div><div id="history" class="history">لا توجد تسبيحات محفوظة بعد.</div></div>
+</section>
+<section id="adhkar" class="view">
+  <span class="eyebrow">ذكر يطمئن القلب</span><h2>أذكار مختارة</h2>
+  <div class="adhkar-list">
+    <article class="panel"><b>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</b><p class="muted">ذكر عظيم يسير على اللسان.</p><button class="secondary add-dhikr" data-text="سبحان الله وبحمده">سبّح بهذا الذكر</button></article>
+    <article class="panel"><b>أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</b><p class="muted">استغفار وتجديد للتوبة.</p><button class="secondary add-dhikr" data-text="أستغفر الله وأتوب إليه">استغفر</button></article>
+    <article class="panel"><b>لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ</b><p class="muted">كنز من كنوز الجنة.</p><button class="secondary add-dhikr" data-text="لا حول ولا قوة إلا بالله">ردّد الذكر</button></article>
+  </div>
+</section>
+</main>
+<footer>اللهم تقبّل هذا العمل واجعله خالصًا لوجهك الكريم.</footer>
+<script src="app.js"></script>
+</body></html>

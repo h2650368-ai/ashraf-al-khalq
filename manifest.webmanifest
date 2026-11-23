@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "أشرف الخلق",
+  "short_name": "أشرف الخلق",
+  "description": "مساحة للقرآن الكريم والذكر ومواقيت الصلاة",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1412",
+  "theme_color": "#101b19",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
