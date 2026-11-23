@@ -31,7 +31,7 @@
   <p class="muted">فعّل الأذونات التي تحتاجها. أندرويد سيعرض شاشة النظام للموافقة، ويمكنك الرفض في أي وقت.</p>
   <div class="native-actions">
     <button id="notifyPermission" class="secondary">السماح بالإشعارات</button>
-    <button id="overlayPermission" class="secondary">السماح بالظهور فوق التطبيقات</button>
+    <p class="tiny">لا يفتح Android التطبيق تلقائيًا فوق YouTube؛ عند الأذان يظهر إشعار، والضغط عليه يفتح واجهة الصلاة.</p>
     <button id="enablePrayerAlerts" class="primary">تفعيل تنبيهات الأذان</button>
   </div>
   <p id="nativeStatus" class="tiny" role="status">التنبيهات المجدولة تعمل في نسخة Android بعد منح الإذن. قد يؤخر نظام توفير البطارية بعض التنبيهات؛ نسخة الويب لا تدعم الجدولة الموثوقة عند إغلاق المتصفح.</p>
@@ -75,7 +75,7 @@
 <section id="settings" class="view">
   <span class="eyebrow">خصص تجربتك</span><h2>الإعدادات</h2>
   <div class="panel settings-grid">
-    <label>لغة التطبيق<select id="languageSetting"><option value="ar">العربية</option><option value="en">English (واجهة تجريبية)</option></select></label>
+    <label>لغة التطبيق<select id="languageSetting"><option value="ar">العربية</option><option value="en" disabled>English (قريبًا)</option></select></label>
     <label>خلفية واجهة الأذان<select id="adhanTheme"><option value="green">أخضر وذهبي</option><option value="night">ليل هادئ</option><option value="light">فاتح</option></select></label>
     <label>صوت التنبيه<select id="adhanVoice"><option value="system">نغمة إشعار الهاتف</option><option value="silent">بدون صوت</option></select></label>
     <label>طريقة حساب المواقيت<select id="calcMethod"><option value="5">الهيئة المصرية العامة للمساحة</option><option value="4">أم القرى</option><option value="3">رابطة العالم الإسلامي</option><option value="2">جامعة العلوم الإسلامية بكراتشي</option></select></label>
