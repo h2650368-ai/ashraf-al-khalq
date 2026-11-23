@@ -26,7 +26,7 @@ write('MainActivity.java',[
 'import android.Manifest;','import android.content.Intent;','import android.os.Build;','import android.webkit.JavascriptInterface;','import android.widget.Toast;','import com.getcapacitor.BridgeActivity;','import org.json.JSONObject;',
 'public class MainActivity extends BridgeActivity {',
 ' @Override public void onStart(){super.onStart();if(getBridge()!=null&&getBridge().getWebView()!=null)getBridge().getWebView().addJavascriptInterface(new NativeControls(),"AshrafAndroid");}',
-' @Override protected void onResume(){super.onResume();deliverPrayerIntent();}',
+' @Override public void onResume(){super.onResume();deliverPrayerIntent();}',
 ' @Override protected void onNewIntent(Intent intent){super.onNewIntent(intent);setIntent(intent);deliverPrayerIntent();}',
 ' private void deliverPrayerIntent(){if(getIntent()==null||!getIntent().hasExtra("ashraf_prayer")||getBridge()==null||getBridge().getWebView()==null)return;String p=getIntent().getStringExtra("ashraf_prayer");getIntent().removeExtra("ashraf_prayer");String safe=JSONObject.quote(p==null?"":p);getBridge().getWebView().postDelayed(()->getBridge().getWebView().evaluateJavascript("if(window.onNativePrayerOpen)window.onNativePrayerOpen("+safe+")",null),1000);}',
 ' public class NativeControls {',
