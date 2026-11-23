@@ -16,7 +16,7 @@ $$('.tas-back').forEach(b=>b.addEventListener('click',()=>{$$('.tas-page').forEa
 $('#useDhikr').addEventListener('click',()=>{const name=currentDhikr();$('#activeDhikrTitle').textContent=name;showTasPage('counter')});
 function applyPrefs(){
  document.documentElement.lang=prefs.language;document.documentElement.dir=prefs.language==='ar'?'rtl':'ltr';document.body.dataset.theme=prefs.theme;
- [['languageSetting',prefs.language],['adhanTheme',prefs.theme],['adhanVoice',prefs.adhanVoice],['calcMethod',prefs.method]].forEach(([id,val])=>{const e=document.getElementById(id);if(e)e.value=val});
+ [['languageSetting',prefs.language],['adhanTheme',prefs.theme],['adhanVoice',prefs.adhanVoice],['adhanVoiceQuick',prefs.adhanVoice],['calcMethod',prefs.method]].forEach(([id,val])=>{const e=document.getElementById(id);if(e)e.value=val});
  $('#salawatReminder').checked=!!prefs.salawat;$('#prayerAlerts').checked=!!prefs.prayerAlerts;$('#notificationVibration').checked=!!prefs.vibration;
  $('#manualLat').value=prefs.latitude||'';$('#manualLon').value=prefs.longitude||'';
 }
@@ -55,10 +55,10 @@ async function fetchPrayerTimes(lat,lon){
  return j.data;
 }
 function locate(){if(!navigator.geolocation){$('#locationText').textContent='تحديد الموقع غير مدعوم.';return}$('#locationText').textContent='جارٍ تحديد موقعك…';navigator.geolocation.getCurrentPosition(async p=>{prefs.latitude=String(p.coords.latitude);prefs.longitude=String(p.coords.longitude);localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();try{await fetchPrayerTimes(prefs.latitude,prefs.longitude)}catch{$('#locationText').textContent='تعذر جلب المواقيت. تحقق من الإنترنت.'}},()=>{$('#locationText').textContent='لم يتم السماح بالموقع. أدخل الإحداثيات يدويًا من الإعدادات.'},{enableHighAccuracy:false,timeout:15000,maximumAge:600000})}
-$('#locateBtn').addEventListener('click',locate);
+$('#locateBtn').addEventListener('click',locate);\n$('#adhanVoiceQuick').addEventListener('change',async()=>{prefs.adhanVoice=$('#adhanVoiceQuick').value;localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();if(validCoords(prefs.latitude,prefs.longitude)&&prefs.prayerAlerts){try{await fetchPrayerTimes(prefs.latitude,prefs.longitude)}catch{$('#locationText').textContent='حُفظ اختيار الصوت، لكن تعذر تحديث التنبيهات.'}}});\n
 function requestNotifications(){if(window.AshrafAndroid?.requestNotifications){window.AshrafAndroid.requestNotifications();return}if(!('Notification'in window)){$('#nativeStatus').textContent='الإشعارات غير مدعومة في هذا المتصفح.';return}Notification.requestPermission().then(p=>{$('#nativeStatus').textContent=p==='granted'?'تم السماح بإشعارات المتصفح؛ الجدولة عند إغلاقه غير مضمونة.':'لم يتم السماح بالإشعارات.'})}
-$('#notifyPermission').addEventListener('click',requestNotifications);$('#prayerNotifyBtn').addEventListener('click',requestNotifications);
-$('#enablePrayerAlerts').addEventListener('click',()=>{requestNotifications();if(!prefs.latitude||!prefs.longitude){locate();return}fetchPrayerTimes(prefs.latitude,prefs.longitude).then(()=>{$('#nativeStatus').textContent='تم تحديث مواقيت الصلاة وإرسالها لجدولة التنبيهات.'}).catch(()=>{$('#nativeStatus').textContent='تعذر تحديث المواقيت. تحقق من الموقع والإنترنت.'})});
+$('#notifyPermission').addEventListener('click',requestNotifications);$('#prayerNotifyBtn').addEventListener('click',enablePrayerAlerts);
+async function enablePrayerAlerts(){requestNotifications();$('#nativeStatus').textContent='جارٍ تفعيل الإشعارات وتحديث مواقيت الصلاة…';if(!prefs.latitude||!prefs.longitude){$('#nativeStatus').textContent='اسمح بالوصول للموقع لحساب المواقيت وجدولة التنبيهات.';locate();return}try{await fetchPrayerTimes(prefs.latitude,prefs.longitude);$('#nativeStatus').textContent='تم إرسال مواقيت الصلاة لجدولة التنبيهات. تأكد من السماح بإشعارات التطبيق.'}catch{$('#nativeStatus').textContent='تعذر تحديث المواقيت. تحقق من الإنترنت والموقع ثم حاول مرة أخرى.'}}\n$('#enablePrayerAlerts').addEventListener('click',enablePrayerAlerts);
 
 $('#openAdhanBtn').addEventListener('click',()=>{$('#adhanPrayerName').textContent='مواقيت الصلاة';showTab('adhanScreen')});$('#backFromAdhan').addEventListener('click',()=>showTab('home'));
 window.onNativePrayerOpen=name=>{$('#adhanPrayerName').textContent='حان الآن موعد صلاة '+String(name||'');showTab('adhanScreen')};
