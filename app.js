@@ -162,3 +162,19 @@ $('#installBtn').addEventListener('click', async () => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
+
+ 
+// Native Android controls are available only in the installed APK.
+const nativeStatus = $('#nativeStatus');
+function callAndroid(method, unavailableMessage) {
+  if (window.AshrafAndroid && typeof window.AshrafAndroid[method] === 'function') {
+    window.AshrafAndroid[method]();
+    nativeStatus.textContent = 'تم إرسال طلب الإذن إلى إعدادات Android. أكمل الموافقة من شاشة النظام.';
+  } else {
+    nativeStatus.textContent = unavailableMessage || 'هذه الخاصية متاحة في نسخة Android المثبتة فقط، وليست في المتصفح.';
+  }
+}
+$('#notifyPermission').addEventListener('click', () => callAndroid('requestNotifications'));
+$('#overlayPermission').addEventListener('click', () => callAndroid('requestOverlay'));
+$('#backgroundService').addEventListener('click', () => callAndroid('startBackgroundService', 'خدمة الخلفية ستعمل بعد تثبيت APK؛ المتصفح لا يستطيع تشغيل خدمة Android.'));
+$('#stopBackgroundService').addEventListener('click', () => callAndroid('stopBackgroundService'));
