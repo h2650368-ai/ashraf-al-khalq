@@ -1,5 +1,5 @@
 'use strict';
-const CACHE_NAME = 'ashraf-khalq-v4';
+const CACHE_NAME = 'ashraf-khalq-v5';
 const APP_FILES = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './assets/icon.svg', './assets/memorial.webp'];
 
 self.addEventListener('install', (event) => {
