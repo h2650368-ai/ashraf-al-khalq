@@ -18,7 +18,7 @@
   <div class="section-head"><div><span class="eyebrow">مواقيت الصلاة</span><h2>صلاتك في وقتها</h2></div><button id="locateBtn" class="ghost">تحديد موقعي</button></div>
   <p id="locationText" class="muted">فعّل الموقع لعرض المواقيت حسب مدينتك.</p>
   <div id="prayerTimes" class="times"><div><small>الفجر</small><b>—:—</b></div><div><small>الظهر</small><b>—:—</b></div><div><small>العصر</small><b>—:—</b></div><div><small>المغرب</small><b>—:—</b></div><div><small>العشاء</small><b>—:—</b></div></div>
-  <p class="tiny">المواقيت تُجلب من خدمة حساب المواقيت، وقد تختلف حسب طريقة الحساب المعتمدة.</p>
+  <div class="prayer-actions"><button id="prayerNotifyBtn" class="secondary">تفعيل تنبيهات الصلاة</button><button id="openAdhanBtn" class="ghost">واجهة الأذان</button></div><p class="tiny">المواقيت تُجلب من خدمة حساب المواقيت، وقد تختلف حسب طريقة الحساب المعتمدة.</p>
 </section>
 <section class="panel memorial">
   <div class="memorial-photo" aria-label="مكان صورة أشرف">
@@ -38,7 +38,7 @@
   <p id="nativeStatus" class="tiny" role="status">خدمة الخلفية الحالية تعرض إشعارًا مستمرًا فقط؛ جدولة الأذان وتشغيل صوته تلقائيًا لم تُنفّذ بعد. نسخة الويب لا تستطيع منح أذونات Android.</p>
 </section>
 <nav class="tabs" aria-label="أقسام التطبيق">
-  <button class="tab active" data-tab="home">الرئيسية</button><button class="tab" data-tab="quran">القرآن</button><button class="tab" data-tab="tasbeeh">السبحة</button><button class="tab" data-tab="adhkar">الأذكار</button>
+  <button class="tab active" data-tab="home">الرئيسية</button><button class="tab" data-tab="quran">القرآن</button><button class="tab" data-tab="tasbeeh">السبحة</button><button class="tab" data-tab="adhkar">الأذكار</button><button class="tab" data-tab="settings">الإعدادات</button>
 </nav>
 <section id="home" class="view active">
   <div class="cards">
@@ -51,7 +51,7 @@
 <section id="quran" class="view">
   <div class="section-head"><div><span class="eyebrow">كلام الله</span><h2>القرآن الكريم</h2></div></div>
   <div class="row"><select id="surahSelect" aria-label="اختر السورة"><option value="">جاري تحميل السور…</option></select><button id="loadSurah" class="primary">عرض</button></div>
-  <div id="quranContent" class="quran-content panel">اختر سورة لعرض آياتها.</div>
+  <div class="reciter-row"><label for="reciterSelect">القارئ</label><select id="reciterSelect"><option value="ar.alafasy">مشاري العفاسي</option><option value="ar.abdurrahmaansudais">عبدالرحمن السديس</option><option value="ar.mahermuaiqly">ماهر المعيقلي</option><option value="ar.husary">محمود خليل الحصري</option><option value="ar.minshawi">محمد صديق المنشاوي</option></select></div><div id="quranContent" class="quran-content panel">اختر سورة لعرض آياتها.</div><div class="audio-panel panel"><div id="audioLabel">استمع إلى تلاوة السورة</div><audio id="quranAudio" controls preload="none"></audio></div>
   <p class="tiny">النص القرآني يُحمّل من واجهة AlQuran Cloud. راجع المصحف المعتمد عند الحفظ أو المراجعة.</p>
 </section>
 <section id="tasbeeh" class="view">
