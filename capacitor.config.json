@@ -1,0 +1,8 @@
+{
+  "appId": "com.ashrafalkhalq.app",
+  "appName": "أشرف الخلق",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
