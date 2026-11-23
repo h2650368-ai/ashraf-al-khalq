@@ -60,6 +60,10 @@ $('#locateBtn').addEventListener('click',locate);
 $('#adhanVoiceQuick').addEventListener('change',async()=>{prefs.adhanVoice=$('#adhanVoiceQuick').value;localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();if(validCoords(prefs.latitude,prefs.longitude)&&prefs.prayerAlerts){try{await fetchPrayerTimes(prefs.latitude,prefs.longitude)}catch{$('#locationText').textContent='حُفظ اختيار الصوت، لكن تعذر تحديث التنبيهات.'}}});
 
 function requestNotifications(){if(window.AshrafAndroid?.requestNotifications){window.AshrafAndroid.requestNotifications();return}if(!('Notification'in window)){$('#nativeStatus').textContent='الإشعارات غير مدعومة في هذا المتصفح.';return}Notification.requestPermission().then(p=>{$('#nativeStatus').textContent=p==='granted'?'تم السماح بإشعارات المتصفح؛ الجدولة عند إغلاقه غير مضمونة.':'لم يتم السماح بالإشعارات.'})}
+$('#backgroundPermission').addEventListener('click',()=>{if(window.AshrafAndroid?.requestBackgroundPermission)window.AshrafAndroid.requestBackgroundPermission();else $('#nativeStatus').textContent='إعداد الخلفية متاح في نسخة Android المثبتة فقط.'});
+$('#overlayPermission').addEventListener('click',()=>{if(window.AshrafAndroid?.requestOverlayPermission)window.AshrafAndroid.requestOverlayPermission();else $('#nativeStatus').textContent='الظهور فوق التطبيقات غير متاح من نسخة الموقع.'});
+$('#pickAdhanSound').addEventListener('click',()=>{if(window.AshrafAndroid?.pickAdhanSound)window.AshrafAndroid.pickAdhanSound();else $('#nativeStatus').textContent='اختيار صوت من الهاتف متاح في نسخة Android المثبتة فقط.'});
+window.onAdhanSoundPicked=uri=>{prefs.adhanVoice=uri?'system':'system';localStorage.setItem(KEY.settings,JSON.stringify(prefs));$('#nativeStatus').textContent=uri?'تم اختيار صوت الأذان من الهاتف. اضغط حفظ الإعدادات لتطبيقه.':'تم إلغاء اختيار الصوت.'};
 $('#notifyPermission').addEventListener('click',requestNotifications);$('#prayerNotifyBtn').addEventListener('click',enablePrayerAlerts);
 async function enablePrayerAlerts(){requestNotifications();$('#nativeStatus').textContent='جارٍ تفعيل الإشعارات وتحديث مواقيت الصلاة…';if(!prefs.latitude||!prefs.longitude){$('#nativeStatus').textContent='اسمح بالوصول للموقع لحساب المواقيت وجدولة التنبيهات.';locate();return}try{await fetchPrayerTimes(prefs.latitude,prefs.longitude);$('#nativeStatus').textContent='تم إرسال مواقيت الصلاة لجدولة التنبيهات. تأكد من السماح بإشعارات التطبيق.'}catch{$('#nativeStatus').textContent='تعذر تحديث المواقيت. تحقق من الإنترنت والموقع ثم حاول مرة أخرى.'}}
 $('#enablePrayerAlerts').addEventListener('click',enablePrayerAlerts);
@@ -77,6 +81,7 @@ $('#saveSettings').addEventListener('click',async()=>{
  else{if(window.AshrafAndroid?.cancelPrayerAlarms)window.AshrafAndroid.cancelPrayerAlarms();$('#settingsStatus').textContent='تم حفظ الإعدادات على هذا الجهاز.'}
 });
 applyPrefs();
+if(window.AshrafAndroid?.requestNotifications)window.AshrafAndroid.requestNotifications();
 if(prefs.salawat&&window.AshrafAndroid?.setSalawatReminder)window.AshrafAndroid.setSalawatReminder(true);
 if(prefs.prayerAlerts&&validCoords(prefs.latitude,prefs.longitude))fetchPrayerTimes(prefs.latitude,prefs.longitude).catch(()=>{});
 let deferredPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('#installBtn').hidden=false});
