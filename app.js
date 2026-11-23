@@ -178,3 +178,64 @@ $('#notifyPermission').addEventListener('click', () => callAndroid('requestNotif
 $('#overlayPermission').addEventListener('click', () => callAndroid('requestOverlay'));
 $('#backgroundService').addEventListener('click', () => callAndroid('startBackgroundService', 'خدمة الخلفية ستعمل بعد تثبيت APK؛ المتصفح لا يستطيع تشغيل خدمة Android.'));
 $('#stopBackgroundService').addEventListener('click', () => callAndroid('stopBackgroundService'));
+
+
+// User settings and prayer/Quran experience
+const PREF_KEY = 'ashraf.settings.v1';
+const defaultPrefs = { language:'ar', theme:'green', adhanVoice:'makkah', method:'5', salawat:false, vibration:true, latitude:'', longitude:'' };
+function loadPrefs(){ try { return {...defaultPrefs,...JSON.parse(localStorage.getItem(PREF_KEY)||'{}')}; } catch { return {...defaultPrefs}; } }
+let prefs = loadPrefs();
+function applyPrefs(){
+  document.documentElement.lang = prefs.language;
+  document.documentElement.dir = prefs.language === 'ar' ? 'rtl' : 'ltr';
+  document.body.dataset.theme = prefs.theme;
+  $('#languageSetting').value=prefs.language; $('#adhanTheme').value=prefs.theme;
+  $('#adhanVoice').value=prefs.adhanVoice; $('#calcMethod').value=prefs.method;
+  $('#salawatReminder').checked=!!prefs.salawat; $('#notificationVibration').checked=!!prefs.vibration;
+  $('#manualLat').value=prefs.latitude; $('#manualLon').value=prefs.longitude;
+}
+applyPrefs();
+$('#saveSettings').addEventListener('click',()=>{
+  prefs={language:$('#languageSetting').value,theme:$('#adhanTheme').value,adhanVoice:$('#adhanVoice').value,method:$('#calcMethod').value,salawat:$('#salawatReminder').checked,vibration:$('#notificationVibration').checked,latitude:$('#manualLat').value.trim(),longitude:$('#manualLon').value.trim()};
+  localStorage.setItem(PREF_KEY,JSON.stringify(prefs)); applyPrefs();
+  $('#settingsStatus').textContent='تم حفظ الإعدادات على هذا الجهاز.';
+  if(window.AshrafAndroid?.setReminderEnabled) window.AshrafAndroid.setReminderEnabled(prefs.salawat);
+});
+$('#openAdhanBtn').addEventListener('click',()=>{ $('#adhanPrayerName').textContent='مواقيت الصلاة'; showTab('adhanScreen'); });
+$('#backFromAdhan').addEventListener('click',()=>showTab('home'));
+$('#prayerNotifyBtn').addEventListener('click',async()=>{
+  if(!('Notification' in window)){ $('#nativeStatus').textContent='الإشعارات غير مدعومة في هذا الجهاز.'; return; }
+  const permission=await Notification.requestPermission();
+  $('#nativeStatus').textContent=permission==='granted'?'تم السماح بإشعارات التطبيق. جدولة الأذان بالخلفية تتطلب نسخة Android الأصلية.':'لم يتم السماح بالإشعارات.';
+  if(window.AshrafAndroid?.requestNotifications) window.AshrafAndroid.requestNotifications();
+});
+const originalLocate=$('#locateBtn').onclick;
+$('#locateBtn').addEventListener('click',()=>{ /* location request remains user initiated */ });
+async function refreshPrayerTimes(latitude,longitude){
+  const url='https://api.aladhan.com/v1/timings?latitude='+encodeURIComponent(latitude)+'&longitude='+encodeURIComponent(longitude)+'&method='+encodeURIComponent(prefs.method);
+  const response=await fetch(url); if(!response.ok) throw new Error('prayer api');
+  const json=await response.json(); if(!json.data?.timings) throw new Error('invalid timings');
+  const t=json.data.timings; const entries=[['الفجر',t.Fajr],['الظهر',t.Dhuhr],['العصر',t.Asr],['المغرب',t.Maghrib],['العشاء',t.Isha]];
+  $('#prayerTimes').innerHTML=entries.map(([n,v])=>'<div><small>'+n+'</small><b>'+escapeHtml(v)+'</b></div>').join('');
+  $('#locationText').textContent='تم تحديث المواقيت حسب الإعدادات.';
+}
+$('#saveSettings').addEventListener('click',async()=>{
+  if(prefs.latitude && prefs.longitude && Number.isFinite(Number(prefs.latitude)) && Number.isFinite(Number(prefs.longitude))){
+    try{await refreshPrayerTimes(prefs.latitude,prefs.longitude);}catch{$('#settingsStatus').textContent='حُفظت الإعدادات، لكن تعذر تحديث المواقيت. تحقق من الإحداثيات والإنترنت.';}
+  }
+});
+$('#reciterSelect').addEventListener('change',()=>playSurahAudio());
+async function playSurahAudio(){
+  const number=Number($('#surahSelect').value); if(!number) return;
+  const edition=$('#reciterSelect').value;
+  $('#audioLabel').textContent='جاري تجهيز التلاوة…';
+  try{
+    const response=await fetch('https://api.alquran.cloud/v1/surah/'+number+'/'+encodeURIComponent(edition));
+    if(!response.ok) throw new Error('audio api');
+    const json=await response.json(); const first=json.data?.ayahs?.[0]?.audio;
+    if(!first) throw new Error('no audio');
+    $('#quranAudio').src=first; $('#audioLabel').textContent='تلاوة السورة — '+$('#reciterSelect').selectedOptions[0].textContent;
+  }catch{$('#audioLabel').textContent='تعذر تحميل التلاوة حاليًا.';}
+}
+const previousLoadSurah=$('#loadSurah').onclick;
+$('#loadSurah').addEventListener('click',()=>playSurahAudio());
