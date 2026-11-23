@@ -8,7 +8,7 @@ function loadPrefs(){try{return {...defaults,...JSON.parse(localStorage.getItem(
 function readCount(){const n=Number(localStorage.getItem(KEY.count));return Number.isFinite(n)&&n>=0?n:0}
 function readHistory(){try{const v=JSON.parse(localStorage.getItem(KEY.history)||'[]');return Array.isArray(v)?v.filter(x=>x&&typeof x.text==='string'&&Number.isFinite(Number(x.count))):[]}catch{return []}}
 function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function showTab(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));window.scrollTo({top:0,behavior:'smooth'})}
+function showTab(id){const target=document.getElementById(id);if(!target||!target.classList.contains('view'))return;$('.view').forEach(v=>v.classList.toggle('active',v===target));$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-tab]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
 function applyPrefs(){
  document.documentElement.lang=prefs.language;document.documentElement.dir=prefs.language==='ar'?'rtl':'ltr';document.body.dataset.theme=prefs.theme;
@@ -49,11 +49,11 @@ $('#locateBtn').addEventListener('click',locate);
 function requestNotifications(){if(window.AshrafAndroid?.requestNotifications){window.AshrafAndroid.requestNotifications();return}if(!('Notification'in window)){$('#nativeStatus').textContent='الإشعارات غير مدعومة في هذا المتصفح.';return}Notification.requestPermission().then(p=>{$('#nativeStatus').textContent=p==='granted'?'تم السماح بإشعارات المتصفح؛ الجدولة عند إغلاقه غير مضمونة.':'لم يتم السماح بالإشعارات.'})}
 $('#notifyPermission').addEventListener('click',requestNotifications);$('#prayerNotifyBtn').addEventListener('click',requestNotifications);
 $('#enablePrayerAlerts').addEventListener('click',()=>{requestNotifications();if(!prefs.latitude||!prefs.longitude){locate();return}fetchPrayerTimes(prefs.latitude,prefs.longitude).then(()=>{$('#nativeStatus').textContent='تم تحديث مواقيت الصلاة وإرسالها لجدولة التنبيهات.'}).catch(()=>{$('#nativeStatus').textContent='تعذر تحديث المواقيت. تحقق من الموقع والإنترنت.'})});
-$('#overlayPermission').addEventListener('click',()=>{if(window.AshrafAndroid?.requestOverlay)window.AshrafAndroid.requestOverlay();else $('#nativeStatus').textContent='إذن الظهور فوق التطبيقات متاح في نسخة Android فقط.'});
+$('#overlayPermission').addEventListener('click',()=>{if(window.AshrafAndroid?.requestOverlay){window.AshrafAndroid.requestOverlay();$('#nativeStatus').textContent='سيطلب Android الإذن من إعدادات النظام. السماح لا يعني أن التطبيق سيفتح نفسه فوق التطبيقات تلقائيًا.'}else $('#nativeStatus').textContent='هذه الميزة تتطلب نسخة Android الأصلية؛ غير متاحة في نسخة الويب.'});
 $('#openAdhanBtn').addEventListener('click',()=>{$('#adhanPrayerName').textContent='مواقيت الصلاة';showTab('adhanScreen')});$('#backFromAdhan').addEventListener('click',()=>showTab('home'));
 window.onNativePrayerOpen=name=>{$('#adhanPrayerName').textContent='حان الآن موعد صلاة '+String(name||'');showTab('adhanScreen')};
 $('#saveSettings').addEventListener('click',async()=>{
- prefs={language:$('#languageSetting').value,theme:$('#adhanTheme').value,adhanVoice:$('#adhanVoice').value,method:$('#calcMethod').value,salawat:$('#salawatReminder').checked,prayerAlerts:$('#prayerAlerts').checked,vibration:$('#notificationVibration').checked,latitude:$('#manualLat').value.trim(),longitude:$('#manualLon').value.trim()};
+ const enteredLat=$('#manualLat').value.trim(),enteredLon=$('#manualLon').value.trim();\n const nextLat=enteredLat||prefs.latitude||'',nextLon=enteredLon||prefs.longitude||'';\n prefs={language:$('#languageSetting').value,theme:$('#adhanTheme').value,adhanVoice:$('#adhanVoice').value,method:$('#calcMethod').value,salawat:$('#salawatReminder').checked,prayerAlerts:$('#prayerAlerts').checked,vibration:$('#notificationVibration').checked,latitude:nextLat,longitude:nextLon};
  if((prefs.latitude||prefs.longitude)&&!validCoords(prefs.latitude,prefs.longitude)){$('#settingsStatus').textContent='أدخل خط العرض والطول بشكل صحيح، أو اتركهما فارغين.';return}
  localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();
  if(window.AshrafAndroid?.setSalawatReminder)window.AshrafAndroid.setSalawatReminder(prefs.salawat);
@@ -66,3 +66,8 @@ if(prefs.prayerAlerts&&validCoords(prefs.latitude,prefs.longitude))fetchPrayerTi
 let deferredPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('#installBtn').hidden=false});
 $('#installBtn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('#installBtn').hidden=true});
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+
+// Wallpaper cards apply and persist the selected Adhan screen palette.
+$$('[data-wallpaper]').forEach(button=>button.addEventListener('click',()=>{const theme=button.dataset.wallpaper;if(!['green','night','light'].includes(theme))return;prefs.theme=theme;localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();$('#settingsStatus').textContent='تم تطبيق خلفية واجهة الأذان وحفظها.';showTab('settings')}));
+// Keep the memorial panel graceful if the owner's original photo has not yet been added.
+const memorialImage=$('.memorial-photo img');if(memorialImage){memorialImage.addEventListener('error',()=>{const box=memorialImage.parentElement;box.innerHTML='<div class="photo-placeholder"><span>۞</span><b>رحم الله أشرف</b><small>اللهم اغفر له وارحمه</small></div>'},{once:true})}
