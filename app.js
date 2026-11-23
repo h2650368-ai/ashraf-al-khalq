@@ -53,7 +53,8 @@ $('#overlayPermission').addEventListener('click',()=>{if(window.AshrafAndroid?.r
 $('#openAdhanBtn').addEventListener('click',()=>{$('#adhanPrayerName').textContent='مواقيت الصلاة';showTab('adhanScreen')});$('#backFromAdhan').addEventListener('click',()=>showTab('home'));
 window.onNativePrayerOpen=name=>{$('#adhanPrayerName').textContent='حان الآن موعد صلاة '+String(name||'');showTab('adhanScreen')};
 $('#saveSettings').addEventListener('click',async()=>{
- const enteredLat=$('#manualLat').value.trim(),enteredLon=$('#manualLon').value.trim();\n const nextLat=enteredLat||prefs.latitude||'',nextLon=enteredLon||prefs.longitude||'';\n prefs={language:$('#languageSetting').value,theme:$('#adhanTheme').value,adhanVoice:$('#adhanVoice').value,method:$('#calcMethod').value,salawat:$('#salawatReminder').checked,prayerAlerts:$('#prayerAlerts').checked,vibration:$('#notificationVibration').checked,latitude:nextLat,longitude:nextLon};
+ const enteredLat=$('#manualLat').value.trim(),enteredLon=$('#manualLon').value.trim();
+ const nextLat=enteredLat||prefs.latitude||'',nextLon=enteredLon||prefs.longitude||'';\n prefs={language:$('#languageSetting').value,theme:$('#adhanTheme').value,adhanVoice:$('#adhanVoice').value,method:$('#calcMethod').value,salawat:$('#salawatReminder').checked,prayerAlerts:$('#prayerAlerts').checked,vibration:$('#notificationVibration').checked,latitude:nextLat,longitude:nextLon};
  if((prefs.latitude||prefs.longitude)&&!validCoords(prefs.latitude,prefs.longitude)){$('#settingsStatus').textContent='أدخل خط العرض والطول بشكل صحيح، أو اتركهما فارغين.';return}
  localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();
  if(window.AshrafAndroid?.setSalawatReminder)window.AshrafAndroid.setSalawatReminder(prefs.salawat);
