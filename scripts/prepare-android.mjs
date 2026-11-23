@@ -24,7 +24,7 @@ fs.mkdirSync(dir,{recursive:true});
 function write(name,lines){fs.writeFileSync(path.join(dir,name),lines.join('\n'));}
 write('MainActivity.java',[
 'package com.ashrafalkhalq.app;',
-'import android.Manifest;','import android.content.Intent;','import android.net.Uri;','import android.os.Build;','import android.provider.Settings;','import android.webkit.JavascriptInterface;','import android.widget.Toast;','import com.getcapacitor.BridgeActivity;','import org.json.JSONObject;',
+'import android.Manifest;','import android.content.Intent;','import android.os.Build;','import android.webkit.JavascriptInterface;','import android.widget.Toast;','import com.getcapacitor.BridgeActivity;','import org.json.JSONObject;',
 'public class MainActivity extends BridgeActivity {',
 ' @Override public void onStart(){super.onStart();if(getBridge()!=null&&getBridge().getWebView()!=null)getBridge().getWebView().addJavascriptInterface(new NativeControls(),"AshrafAndroid");}',
 ' @Override protected void onResume(){super.onResume();deliverPrayerIntent();}',
@@ -32,7 +32,6 @@ write('MainActivity.java',[
 ' private void deliverPrayerIntent(){if(getIntent()==null||!getIntent().hasExtra("ashraf_prayer")||getBridge()==null||getBridge().getWebView()==null)return;String p=getIntent().getStringExtra("ashraf_prayer");getIntent().removeExtra("ashraf_prayer");String safe=JSONObject.quote(p==null?"":p);getBridge().getWebView().postDelayed(()->getBridge().getWebView().evaluateJavascript("if(window.onNativePrayerOpen)window.onNativePrayerOpen("+safe+")",null),1000);}',
 ' public class NativeControls {',
 '  @JavascriptInterface public void requestNotifications(){runOnUiThread(()->{if(Build.VERSION.SDK_INT>=33)requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},4101);else Toast.makeText(MainActivity.this,"إذن الإشعارات من إعدادات التطبيق",Toast.LENGTH_SHORT).show();});}',
-'  @JavascriptInterface public void requestOverlay(){runOnUiThread(()->{if(Build.VERSION.SDK_INT>=23&&!Settings.canDrawOverlays(MainActivity.this)){Intent i=new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,Uri.parse("package:"+getPackageName()));startActivity(i);}else Toast.makeText(MainActivity.this,"إذن الظهور فوق التطبيقات مفعّل",Toast.LENGTH_SHORT).show();});}',
 '  @JavascriptInterface public void schedulePrayerAlarms(String raw){try{PrayerScheduler.saveAndSchedule(MainActivity.this,new JSONObject(raw));}catch(Exception e){runOnUiThread(()->Toast.makeText(MainActivity.this,"تعذر جدولة مواقيت الصلاة",Toast.LENGTH_SHORT).show());}}',
 '  @JavascriptInterface public void cancelPrayerAlarms(){PrayerScheduler.cancel(MainActivity.this);}',
 '  @JavascriptInterface public void setSalawatReminder(boolean enabled){PrayerScheduler.setSalawat(MainActivity.this,enabled);}',
