@@ -13,3 +13,21 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
 
 .memorial{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:20px}.memorial-photo{min-height:160px;border:1px dashed #64766a;border-radius:16px;overflow:hidden;background:linear-gradient(145deg,#1c3028,#101a16);display:grid;place-items:center}.photo-placeholder{display:grid;justify-items:center;text-align:center;padding:14px;gap:5px;color:var(--gold)}.photo-placeholder span{font-size:38px}.photo-placeholder b{font-size:13px}.photo-placeholder small{font-size:10px;color:var(--muted)}.memorial-copy h2,.native-settings h2{margin:6px 0}.native-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.native-actions button{font-size:13px}@media(max-width:600px){.memorial{grid-template-columns:1fr}.memorial-photo{min-height:190px}}
+
+
+.prayer-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.reciter-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0;color:var(--muted)}
+.audio-panel{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.audio-panel audio{width:min(100%,420px)}
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.settings-grid label{display:grid;gap:7px;color:var(--muted);font-size:13px}
+.settings-grid .wide{grid-column:1/-1}
+.settings-grid label span{display:flex;align-items:center;gap:10px}
+.settings-grid input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold)}
+.settings-grid input[type=number],.settings-grid select{width:100%;min-width:0}
+body[data-theme="night"]{--bg:#080e19;--panel:#111c2d;--panel2:#1a2940;--line:#293a55;--gold:#b7c9e8}
+body[data-theme="light"]{--bg:#f3f1e9;--panel:#fffdf6;--panel2:#eee9da;--line:#d9d1bd;--text:#243128;--muted:#667267;--gold:#8b6b27}
+.adhan-screen{text-align:center;min-height:55vh;padding:50px 20px;background:radial-gradient(ellipse at center,#264a37,#0b1412);border-radius:24px}
+.adhan-screen h1{font-size:clamp(38px,8vw,64px);color:var(--gold)}
+.adhan-screen p{font-size:22px;margin-bottom:30px}
+@media(max-width:600px){.settings-grid{grid-template-columns:1fr}.settings-grid .wide{grid-column:auto}.audio-panel{align-items:stretch}.audio-panel audio{width:100%}}
