@@ -239,3 +239,30 @@ async function playSurahAudio(){
 }
 const previousLoadSurah=$('#loadSurah').onclick;
 $('#loadSurah').addEventListener('click',()=>playSurahAudio());
+
+let recitationQueue = [];
+let recitationIndex = 0;
+playSurahAudio = async function(){
+  const number=Number($('#surahSelect').value); if(!number) return;
+  const edition=$('#reciterSelect').value;
+  $('#audioLabel').textContent='جاري تجهيز التلاوة…';
+  try{
+    const response=await fetch('https://api.alquran.cloud/v1/surah/'+number+'/'+encodeURIComponent(edition));
+    if(!response.ok) throw new Error('audio api');
+    const json=await response.json();
+    recitationQueue=(json.data?.ayahs||[]).map(a=>a.audio).filter(Boolean);
+    if(!recitationQueue.length) throw new Error('no audio');
+    recitationIndex=0;
+    $('#quranAudio').src=recitationQueue[0];
+    $('#audioLabel').textContent='تلاوة السورة كاملة — '+$('#reciterSelect').selectedOptions[0].textContent;
+  }catch{recitationQueue=[];$('#audioLabel').textContent='تعذر تحميل التلاوة حاليًا.';}
+};
+$('#quranAudio').addEventListener('ended',()=>{
+  recitationIndex++;
+  if(recitationIndex<recitationQueue.length){
+    $('#quranAudio').src=recitationQueue[recitationIndex];
+    $('#quranAudio').play().catch(()=>{});
+  } else {
+    $('#audioLabel').textContent='انتهت التلاوة. تقبّل الله.';
+  }
+});
