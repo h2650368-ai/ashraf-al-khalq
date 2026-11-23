@@ -80,6 +80,6 @@ $('#installBtn').addEventListener('click',async()=>{if(!deferredPrompt)return;de
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 
 // Wallpaper cards apply and persist the selected Adhan screen palette.
-$('[data-wallpaper]').forEach(button=>button.addEventListener('click',()=>{const theme=button.dataset.wallpaper;if(!['green','night','light'].includes(theme))return;prefs.theme=theme;localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();$('#settingsStatus').textContent='تم تطبيق خلفية واجهة الأذان وحفظها.';showTab('settings')}));
+$$('[data-wallpaper]').forEach(button=>button.addEventListener('click',()=>{const theme=button.dataset.wallpaper;if(!['green','night','light'].includes(theme))return;prefs.theme=theme;localStorage.setItem(KEY.settings,JSON.stringify(prefs));applyPrefs();$('#settingsStatus').textContent='تم تطبيق خلفية واجهة الأذان وحفظها.';showTab('settings')}));
 // Keep the memorial panel graceful if the owner's original photo has not yet been added.
 const memorialImage=$('.memorial-photo img');if(memorialImage){memorialImage.addEventListener('error',()=>{const box=memorialImage.parentElement;box.innerHTML='<div class="photo-placeholder"><span>۞</span><b>رحم الله أشرف</b><small>اللهم اغفر له وارحمه</small></div>'},{once:true})}
