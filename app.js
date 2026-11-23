@@ -49,7 +49,7 @@ $('#locateBtn').addEventListener('click',locate);
 function requestNotifications(){if(window.AshrafAndroid?.requestNotifications){window.AshrafAndroid.requestNotifications();return}if(!('Notification'in window)){$('#nativeStatus').textContent='الإشعارات غير مدعومة في هذا المتصفح.';return}Notification.requestPermission().then(p=>{$('#nativeStatus').textContent=p==='granted'?'تم السماح بإشعارات المتصفح؛ الجدولة عند إغلاقه غير مضمونة.':'لم يتم السماح بالإشعارات.'})}
 $('#notifyPermission').addEventListener('click',requestNotifications);$('#prayerNotifyBtn').addEventListener('click',requestNotifications);
 $('#enablePrayerAlerts').addEventListener('click',()=>{requestNotifications();if(!prefs.latitude||!prefs.longitude){locate();return}fetchPrayerTimes(prefs.latitude,prefs.longitude).then(()=>{$('#nativeStatus').textContent='تم تحديث مواقيت الصلاة وإرسالها لجدولة التنبيهات.'}).catch(()=>{$('#nativeStatus').textContent='تعذر تحديث المواقيت. تحقق من الموقع والإنترنت.'})});
-$('#overlayPermission').addEventListener('click',()=>{if(window.AshrafAndroid?.requestOverlay){window.AshrafAndroid.requestOverlay();$('#nativeStatus').textContent='سيطلب Android الإذن من إعدادات النظام. السماح لا يعني أن التطبيق سيفتح نفسه فوق التطبيقات تلقائيًا.'}else $('#nativeStatus').textContent='هذه الميزة تتطلب نسخة Android الأصلية؛ غير متاحة في نسخة الويب.'});
+
 $('#openAdhanBtn').addEventListener('click',()=>{$('#adhanPrayerName').textContent='مواقيت الصلاة';showTab('adhanScreen')});$('#backFromAdhan').addEventListener('click',()=>showTab('home'));
 window.onNativePrayerOpen=name=>{$('#adhanPrayerName').textContent='حان الآن موعد صلاة '+String(name||'');showTab('adhanScreen')};
 $('#saveSettings').addEventListener('click',async()=>{
