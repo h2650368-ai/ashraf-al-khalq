@@ -11,3 +11,5 @@ button, select { -webkit-tap-highlight-color: transparent; }
 .history-item small { color: var(--muted); }
 button:disabled { opacity: .55; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+.memorial{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:20px}.memorial-photo{min-height:160px;border:1px dashed #64766a;border-radius:16px;overflow:hidden;background:linear-gradient(145deg,#1c3028,#101a16);display:grid;place-items:center}.photo-placeholder{display:grid;justify-items:center;text-align:center;padding:14px;gap:5px;color:var(--gold)}.photo-placeholder span{font-size:38px}.photo-placeholder b{font-size:13px}.photo-placeholder small{font-size:10px;color:var(--muted)}.memorial-copy h2,.native-settings h2{margin:6px 0}.native-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.native-actions button{font-size:13px}@media(max-width:600px){.memorial{grid-template-columns:1fr}.memorial-photo{min-height:190px}}
