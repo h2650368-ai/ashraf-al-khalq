@@ -8,8 +8,9 @@ function loadPrefs(){try{return {...defaults,...JSON.parse(localStorage.getItem(
 function readCount(){const n=Number(localStorage.getItem(KEY.count));return Number.isFinite(n)&&n>=0?n:0}
 function readHistory(){try{const v=JSON.parse(localStorage.getItem(KEY.history)||'[]');return Array.isArray(v)?v.filter(x=>x&&typeof x.text==='string'&&Number.isFinite(Number(x.count))):[]}catch{return []}}
 function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function showTab(id){const target=document.getElementById(id);if(!target||!target.classList.contains('view'))return;$$('.view').forEach(v=>v.classList.toggle('active',v===target));$$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));if(id==='tasbeeh'){$$('.tas-page').forEach(p=>p.hidden=true);$('#tasbeehMenu').hidden=false}window.scrollTo({top:0,behavior:'smooth'})}
-$$('[data-tab]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function showTab(id){const target=document.getElementById(id);if(!target||!target.classList.contains('view'))return;$('.view').forEach(v=>v.classList.toggle('active',v===target));$('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));if(id==='tasbeeh'){$('.tas-page').forEach(p=>p.hidden=true);$('#tasbeehMenu').hidden=false}window.scrollTo({top:0,behavior:'instant'});document.documentElement.scrollTop=0}
+$('[data-tab]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+$('[data-back]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.back)));
 function showTasPage(name){const pages={counter:'#tasCounterPage',dhikr:'#tasDhikrPage',history:'#tasHistoryPage'};$('#tasbeehMenu').hidden=true;Object.values(pages).forEach(sel=>$(sel).hidden=true);if(pages[name])$(pages[name]).hidden=false;window.scrollTo({top:0,behavior:'smooth'});}
 $$('[data-tas-page]').forEach(b=>b.addEventListener('click',()=>showTasPage(b.dataset.tasPage)));
 $$('.tas-back').forEach(b=>b.addEventListener('click',()=>{$$('.tas-page').forEach(p=>p.hidden=true);$('#tasbeehMenu').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}));
