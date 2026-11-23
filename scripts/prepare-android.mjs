@@ -7,7 +7,6 @@ const permissions=[
  '<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />',
  '<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />',
  '<uses-permission android:name="android.permission.VIBRATE" />',
- '<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />'
 ];
 for(const p of permissions){const n=p.match(/android:name="([^"]+)"/)[1];if(!manifest.includes(n))manifest=manifest.replace('<application',p+'\n    <application');}
 const receivers=[
