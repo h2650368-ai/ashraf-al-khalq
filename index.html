@@ -22,9 +22,9 @@
 </section>
 <section class="panel memorial">
   <div class="memorial-photo" aria-label="مكان صورة أشرف">
-    <div class="photo-placeholder"><span>۞</span><b>صورة أشرف رحمه الله</b><small>هنضيف صورته الأصلية هنا بعد إرسالها</small></div>
+    <img src="assets/memorial.webp" alt="تصميم تذكاري لأشرف رحمه الله" loading="lazy">
   </div>
-  <div class="memorial-copy"><span class="eyebrow">رحمه الله رحمة واسعة</span><h2>اللهم اغفر لأشرف وارحمه</h2><p class="muted">واجعل هذا العمل نورًا له، وصدقةً جاريةً في ميزان حسناته.</p></div>
+  <div class="memorial-copy"><span class="eyebrow">رحمه الله رحمة واسعة</span><h2>اللهم اغفر لأشرف وارحمه</h2><p class="memorial-dua">اللهم ارحمه واغفر له واسكنه فسيح جناتك يارب العالمين وارحم جميع موتانا ♥️♥️</p></div>
 </section>
 <section class="panel native-settings">
   <span class="eyebrow">إعدادات نسخة Android</span><h2>تفعيل خدمات الهاتف</h2>
@@ -32,13 +32,12 @@
   <div class="native-actions">
     <button id="notifyPermission" class="secondary">السماح بالإشعارات</button>
     <button id="overlayPermission" class="secondary">السماح بالظهور فوق التطبيقات</button>
-    <button id="backgroundService" class="primary">تشغيل الخدمة في الخلفية</button>
-    <button id="stopBackgroundService" class="ghost">إيقاف الخدمة</button>
+    <button id="enablePrayerAlerts" class="primary">تفعيل تنبيهات الأذان</button>
   </div>
-  <p id="nativeStatus" class="tiny" role="status">خدمة الخلفية الحالية تعرض إشعارًا مستمرًا فقط؛ جدولة الأذان وتشغيل صوته تلقائيًا لم تُنفّذ بعد. نسخة الويب لا تستطيع منح أذونات Android.</p>
+  <p id="nativeStatus" class="tiny" role="status">التنبيهات المجدولة تعمل في نسخة Android بعد منح الإذن. قد يؤخر نظام توفير البطارية بعض التنبيهات؛ نسخة الويب لا تدعم الجدولة الموثوقة عند إغلاق المتصفح.</p>
 </section>
 <nav class="tabs" aria-label="أقسام التطبيق">
-  <button class="tab active" data-tab="home">الرئيسية</button><button class="tab" data-tab="quran">القرآن</button><button class="tab" data-tab="tasbeeh">السبحة</button><button class="tab" data-tab="adhkar">الأذكار</button><button class="tab" data-tab="settings">الإعدادات</button>
+  <button class="tab active" data-tab="home">الرئيسية</button><button class="tab" data-tab="quran">القرآن</button><button class="tab" data-tab="tasbeeh">السبحة</button><button class="tab" data-tab="adhkar">الأذكار</button><button class="tab" data-tab="gallery">الخلفيات</button><button class="tab" data-tab="settings">الإعدادات</button>
 </nav>
 <section id="home" class="view active">
   <div class="cards">
@@ -78,15 +77,19 @@
   <div class="panel settings-grid">
     <label>لغة التطبيق<select id="languageSetting"><option value="ar">العربية</option><option value="en">English (واجهة تجريبية)</option></select></label>
     <label>خلفية واجهة الأذان<select id="adhanTheme"><option value="green">أخضر وذهبي</option><option value="night">ليل هادئ</option><option value="light">فاتح</option></select></label>
-    <label>صوت المؤذن<select id="adhanVoice"><option value="makkah">المسجد الحرام</option><option value="madinah">المسجد النبوي</option><option value="mishary">تنبيه صوتي</option></select></label>
+    <label>صوت التنبيه<select id="adhanVoice"><option value="system">نغمة إشعار الهاتف</option><option value="silent">بدون صوت</option></select></label>
     <label>طريقة حساب المواقيت<select id="calcMethod"><option value="5">الهيئة المصرية العامة للمساحة</option><option value="4">أم القرى</option><option value="3">رابطة العالم الإسلامي</option><option value="2">جامعة العلوم الإسلامية بكراتشي</option></select></label>
     <label>خط العرض<input id="manualLat" type="number" step="any" placeholder="مثال: 28.08"></label>
     <label>خط الطول<input id="manualLon" type="number" step="any" placeholder="مثال: 30.75"></label>
-    <label class="wide">تذكير الصلاة على النبي ﷺ <span><input id="salawatReminder" type="checkbox"> كل 30 دقيقة (الإعداد محفوظ فقط حاليًا)</span></label>
-    <label class="wide">اهتزاز التنبيهات <span><input id="notificationVibration" type="checkbox" checked></span></label>
-    <button id="saveSettings" class="primary wide">حفظ الإعدادات</button>
+    <label class="wide">تذكير الصلاة على النبي ﷺ <span><input id="salawatReminder" type="checkbox"> كل 30 دقيقة</span></label>
+    <label class="wide">تنبيهات الأذان <span><input id="prayerAlerts" type="checkbox" checked></span></label><label class="wide">اهتزاز التنبيهات <span><input id="notificationVibration" type="checkbox" checked></span></label>
+    <button id="saveSettings" class="primary wide">حفظ الإعدادات وتحديث التنبيهات</button>
     <p id="settingsStatus" class="tiny wide" role="status">الإعدادات تُحفظ على هذا الجهاز.</p>
   </div>
+</section>
+<section id="gallery" class="view">
+  <span class="eyebrow">سكينة وطمأنينة</span><h2>خلفيات إسلامية</h2>
+  <div class="wallpaper-grid"><article class="wallpaper wall-one">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</article><article class="wallpaper wall-two">وَهُوَ مَعَكُمْ أَيْنَ مَا كُنْتُمْ</article><article class="wallpaper wall-three">فَاذْكُرُونِي أَذْكُرْكُمْ</article></div>
 </section>
 <section id="adhanScreen" class="view adhan-screen"><span class="eyebrow">حان وقت الصلاة</span><h1 id="adhanPrayerName">الصلاة</h1><p>حيّ على الصلاة — حيّ على الفلاح</p><button id="backFromAdhan" class="primary">العودة للرئيسية</button></section>
 </main>
